@@ -5,13 +5,17 @@ To run this package you need Python 3.4+, PostgresSQL and Redis.
 Features
 ========
 
-Passwordless login with OAuth and email link options.
+* Passwordless login with OAuth and email link options.
+
+* Throttle protection against brute forcing and spam
+
+Screenshots
 
 .. image:: https://github.com/websauna/websauna.magiclogin/raw/master/screenshots/login.png
-    :width: 600
+    :width: 400px
 
 .. image:: https://github.com/websauna/websauna.magiclogin/raw/master/screenshots/email.png
-    :width: 600
+    :width: 400px
 
 Installation
 ============
