@@ -5,6 +5,11 @@
   <meta name="description" content="">
 {% endblock %}
 
+{% block extra_head %}
+{# Include myapp package theme #}
+<link rel="stylesheet" href="{{ 'websauna.magiclogin:static/magiclogin.css'|static_url }}">
+{% endblock %}
+
 {% block content %}
 
   <div id="magiclogin-choose-account">

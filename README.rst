@@ -7,6 +7,12 @@ Features
 
 Passwordless login with OAuth and email link options.
 
+.. image:: https://github.com/websauna/websauna.magiclogin/raw/master/screenshots/login.png
+    :width: 600
+
+.. image:: https://github.com/websauna/websauna.magiclogin/raw/master/screenshots/email.png
+    :width: 600
+
 Installation
 ============
 
@@ -18,7 +24,7 @@ Example ``development.ini``::
         facebook
         google
 
-Example ``development-secrets.ini``::
+Example ``development-secrets.ini`` bits::
 
     [facebook]
     class = authomatic.providers.oauth2.Facebook
@@ -34,22 +40,28 @@ Example ``development-secrets.ini``::
     mapper = websauna.system.user.social.GoogleMapper
     scope = profile email
 
-
-Local development mode
-----------------------
-
-Activate the virtual environment of your Websauna application.
-
-Then::
-
-    cd magiclogin  # This is the folder with setup.py file
-    pip install -e .
-
+Copy bits from ``demo.py`` to your application initializer.
 
 Settings
 ========
 
-* magiclogin.email_token_expiration_seconds = 300
+Available INI settings::
+
+    # Throttle email login endpoints to this window
+    magiclogin.login_email_throttle = 50/3600
+
+    # How fast email login link dies
+    magiclogin.email_token_expiration_seconds = 300
+
+    # Text shown on the login panel
+    magiclogin.login_slogan = Your login text goes here
+
+You might also have long, secure, sessions in production::
+
+    # Set session length to one year
+    redis.sessions.cookie_max_age = 31536000
+    redis.sessions.cookie_secure = True
+    redis.sessions.cookie_httponly = True
 
 Running the development website
 ===============================
