@@ -1,0 +1,14 @@
+{% extends "social/base/login_snippet.html" %}
+
+{% block social %}
+    <form method="post" action="{{'login'|route_url}}/google">
+
+        <input name="csrf_token" type="hidden" value="{{ request.session.get_csrf_token() }}"/>
+
+        <button class="btn btn-primary btn-block btn-lg btn-magic-login btn-login-google">
+            <img class="google-g btn-magic-login-icon" src="{{ 'websauna.magiclogin:static/g_logo.svg'|static_url }}" alt="">
+            Continue with Google
+        </button>
+    </form>
+{% endblock social %}
+

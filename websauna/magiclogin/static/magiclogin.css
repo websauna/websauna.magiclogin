@@ -1,0 +1,42 @@
+#panel-magic-login {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.maginlogin-social-button-wrapper {
+  margin-bottom: 20px;
+}
+
+.btn-magic-login {
+  text-align: left;
+  transition: all 0.3s ease 0s;
+}
+
+.btn-magic-login .btn-magic-login-icon {
+  margin-left: 160px;
+  width: 25px;
+  height: 25px;
+  text-align: center;
+}
+
+.btn-login-facebook {
+  color: #3b5998;
+  border: 1px solid #3b5998;
+  background: white;
+}
+
+.btn-login-google {
+  color: #333;
+  background: white;
+}
+
+.btn-login-google:hover {
+  background: #ddd;
+  border: 1px solid black;
+  color: black;
+}
+
+.google-g {
+  width: 25px;
+  height: 25px;
+}
