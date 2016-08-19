@@ -1,0 +1,2 @@
+{% extends "email/base_subject.txt" %}
+{% block subject %}Sign in to {{ site_name }}{% endblock %}

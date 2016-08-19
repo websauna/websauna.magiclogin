@@ -1,0 +1,12 @@
+{% extends "email/base.html" %}
+
+{% block content %}
+<p style="text-align: center; margin: 25px auto">
+    <a class="btn-primary" style="font-size: 120%" href="{{verify_link}}">Sign in to {{ site_name }}</a>
+</p>
+
+<p style="text-align: center">
+    This is a sign in verification email send from {{ site_name }} website. Click the link above to continue signing in.
+</p>
+
+{% endblock %}

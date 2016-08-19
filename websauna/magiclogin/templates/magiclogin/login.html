@@ -1,43 +1,26 @@
-{% extends "site/base.html" %}
+{% extends "magiclogin/login_panel.html" %}
 
 {% block description %}
   <title>Sign in to {{ site_name }}</title>
   <meta name="description" content="">
 {% endblock %}
 
-{% block content %}
+{% block login_panel_id %}panel-magic-login{% endblock %}
 
-  <div id="magiclogin-choose-account">
-    <div class="row">
-      <div class="col-md-12">
+{% block login_content %}
+    <p class="text-center">
+      {{ login_slogan }}
+    </p>
 
-        <div id="panel-magic-login" class="panel panel-default">
-          <div class="panel-heading">
-            <div class="text-center">
-              <img src="{{ 'websauna.magiclogin:static/logo.png'|static_url }}" alt="">
-            </div>
-          </div>
-
-          <div class="panel-body">
-
-            <p class="text-center">
-              Your login text goes here.
-            </p>
-
-            {% for social in social_logins %}
-              <div class="maginlogin-social-button-wrapper">
-                {% set template = 'social/' + social + '/login_snippet.html' %}
-                {% include template %}
-              </div>
-            {% endfor %}
-
-            <p class="text-center">
-              <a href="">Sign in or sign up with email</a>
-            </p>
-          </div>
-        </div>
+    {% for social in social_logins %}
+      <div class="maginlogin-social-button-wrapper">
+        {% set template = 'social/' + social + '/login_snippet.html' %}
+        {% include template %}
       </div>
-    </div>
-  </div>
-{% endblock content %}
+    {% endfor %}
+
+    <p class="text-center">
+      <a id="nav-sign-in-by-email" href="{{ 'login_email'|route_url }}">Sign in or sign up with email</a>
+    </p>
+{% endblock %}
 

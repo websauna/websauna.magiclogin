@@ -1,0 +1,14 @@
+{% extends "magiclogin/login_panel.html" %}
+
+{% block login_panel_id %}panel-magic-login-email-sent{% endblock %}
+
+{% block login_content %}
+  <p class="text-center">
+    We sent you a link to sign in to your email address <strong>{{ email }}</strong>. Please check your inbox.
+  </p>
+
+  <p class="text-center">
+    <a href="{{ 'login'|route_url }}">Having trouble signing in?</a>
+  </p>
+{% endblock %}
+

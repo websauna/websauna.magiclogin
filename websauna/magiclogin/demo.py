@@ -31,6 +31,7 @@ class Initializer(websauna.system.DemoInitializer):
 
         # Set up user templates
         self.config.add_jinja2_search_path('websauna.magiclogin:templates', name='.html')
+        self.config.add_jinja2_search_path('websauna.magiclogin:templates', name='.txt')
         self.config.add_jinja2_search_path('websauna.system.user:templates', name='.html')
         self.config.add_jinja2_search_path('websauna.system.user:templates', name='.txt')
 

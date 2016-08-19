@@ -2,11 +2,41 @@ This is a Python package for magiclogin, an addon for `Websauna framework <https
 
 To run this package you need Python 3.4+, PostgresSQL and Redis.
 
+Features
+========
+
+Passwordless login with OAuth and email link options.
+
 Installation
 ============
 
+Setup OAuth credential in ``development.ini`` and ``development-secrets.ini`` according to Websauna documentation.
+
+Example ``development.ini``::
+
+    websauna.social_logins =
+        facebook
+        google
+
+Example ``development-secrets.ini``::
+
+    [facebook]
+    class = authomatic.providers.oauth2.Facebook
+    consumer_key = xxx
+    consumer_secret = yyy
+    scope = user_about_me, email
+    mapper = websauna.system.user.social.FacebookMapper
+
+    [google]
+    class = websauna.system.user.googleoauth.Google
+    consumer_key = xxx
+    consumer_secret = yyy
+    mapper = websauna.system.user.social.GoogleMapper
+    scope = profile email
+
+
 Local development mode
------------------------
+----------------------
 
 Activate the virtual environment of your Websauna application.
 
@@ -14,6 +44,12 @@ Then::
 
     cd magiclogin  # This is the folder with setup.py file
     pip install -e .
+
+
+Settings
+========
+
+* magiclogin.email_token_expiration_seconds = 300
 
 Running the development website
 ===============================

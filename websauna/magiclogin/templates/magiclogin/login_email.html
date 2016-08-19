@@ -1,0 +1,16 @@
+{% extends "magiclogin/login_panel.html" %}
+
+{% block login_panel_id %}panel-magic-login-email{% endblock %}
+
+{% block login_content %}
+  <p>
+    Enter your email address to sign in or create an account on {{ site_name }}.
+  </p>
+
+  {{ rendered_form|safe }}
+
+  <p class="text-center">
+    <a href="{{ 'login'|route_url }}">Sign in or sign up with social media account</a>
+  </p>
+{% endblock %}
+
