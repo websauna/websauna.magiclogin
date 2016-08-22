@@ -55,9 +55,6 @@ class Initializer(websauna.system.DemoInitializer):
         # Your app templates go here
         self.config.add_jinja2_search_path('websauna.magiclogin:demotemplates', name='.html', prepend=True)
 
-        # Override default social buttons
-        # self.config.add_jinja2_search_path('websauna.system.user:templates', name='.html')
-
 
 def main(global_config, **settings):
     init = Initializer(global_config)

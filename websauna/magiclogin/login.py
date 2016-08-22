@@ -118,5 +118,7 @@ def start_email_login(request: Request, email: str):
     request.session["email"] = email
     token, data = set_verification_token(request, "email", email)
     verify_link = request.route_url("verify_email_login", token=token)
-    send_templated_mail(request, [email], "magiclogin/email/verify_email", dict(verify_link=verify_link))
+    verify_minutes = int(int(request.registry.settings.get("magiclink.email_token_expiration_seconds", 300)) / 60)
+    logger.info("Sending email login verification email to %s", email)
+    send_templated_mail(request, [email], "magiclogin/email/verify_email", dict(verify_link=verify_link, verify_minutes=verify_minutes))
 
