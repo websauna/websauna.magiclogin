@@ -3,8 +3,16 @@
   margin: 0 auto;
 }
 
-.maginlogin-social-button-wrapper {
-  margin-bottom: 20px;
+.panel-magic-login .panel-body {
+  padding: 40px;
+}
+
+.magic-login-buttons {
+  margin-top: 20px;
+}
+
+.magic-login-social-button-wrapper {
+  margin: 20px 20px;
 }
 
 .btn-magic-login {
@@ -13,16 +21,30 @@
 }
 
 .btn-magic-login .btn-magic-login-icon {
-  margin-left: 160px;
+  margin-left: 120px;
   width: 25px;
   height: 25px;
   text-align: center;
 }
 
+@media(max-width: 960px) {
+  .btn-magic-login .btn-magic-login-icon {
+    margin-left: 20px;
+  }
+}
+
 .btn-login-facebook {
-  color: #3b5998;
+  /*color: #3b5998;
   border: 1px solid #3b5998;
-  background: white;
+  background: white;*/
+  background: #3b5998;
+  border: 1px solid #3b5998;
+  color: white;
+}
+
+.btn-login-facebook:hover {
+  background: #1d315b;
+  border: 1px solid #1d315b;
 }
 
 .btn-login-google {
