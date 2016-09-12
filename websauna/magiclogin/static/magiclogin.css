@@ -21,15 +21,24 @@
 }
 
 .btn-magic-login .btn-magic-login-icon {
-  margin-left: 120px;
   width: 25px;
   height: 25px;
   text-align: center;
 }
 
+.btn-magic-login-inner {
+  width: 260px;
+  margin: 0 auto;
+}
+
 @media(max-width: 960px) {
   .btn-magic-login .btn-magic-login-icon {
     margin-left: 20px;
+  }
+}
+@media(max-width: 768px) {
+  .btn-magic-login-inner {
+    font-size: 80%;
   }
 }
 
