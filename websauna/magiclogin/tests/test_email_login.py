@@ -5,15 +5,11 @@ from sqlalchemy.orm.session import Session
 
 import transaction
 from splinter.driver import DriverAPI
+from websauna.magiclogin.tests.utils import peek_token
 from websauna.system.core.redis import get_redis
 from websauna.system.user.models import User
 
 
-def peek_token(redis):
-    keys = redis.hkeys("login_verification_token")
-    token_data = redis.hget("login_verification_token", keys[0])
-    token_data = json.loads(token_data.decode("utf-8"))
-    return token_data
 
 
 def test_email_login(web_server:str, browser:DriverAPI, dbsession:Session, test_request):

@@ -2,6 +2,7 @@ from pyramid import httpexceptions
 from pyramid.settings import aslist
 import deform
 import colander
+from websauna.magiclogin.requirelogin import get_login_state
 
 from websauna.system.form.schema import CSRFSchema
 from websauna.system.form.throttle import throttled_view
@@ -22,7 +23,7 @@ class AskEmailSchema(CSRFSchema):
         )
 
 
-@simple_route("/login", route_name="login", renderer='magiclogin/login.html', append_slash=False)
+@simple_route("/login", route_name="login", renderer='magiclogin/login.html')
 def login(request: Request):
     """Replace the defaut login view with this simplified version."""
 
@@ -80,3 +81,18 @@ def _verify_email_login(request):
     """Confirm email login token."""
     token = request.matchdict["token"]
     return verify_email_login(request, token)
+
+
+
+@simple_route("/login-to-continue", route_name="login_to_continue", renderer='magiclogin/login_to_continue.html')
+def login_to_continue(request):
+    """require_login() intersitital"""
+
+    state = get_login_state(request)
+
+    msg = state.get("msg")
+
+    settings = request.registry.settings
+    social_logins = aslist(settings.get("websauna.social_logins", []))
+    login_slogan = request.registry.settings.get("magiclogin.login_slogan")
+    return locals()

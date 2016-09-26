@@ -1,0 +1,29 @@
+{% extends "magiclogin/login_panel.html" %}
+
+{% block description %}
+  <title>Login required to continue</title>
+  <meta name="description" content="">
+{% endblock %}
+
+{% block login_panel_id %}panel-magic-login{% endblock %}
+
+{% block login_content %}
+
+    <p class="text-center">
+      {{ msg }}
+    </p>
+
+    <div class="magic-login-buttons">
+      {% for social in social_logins %}
+        <div class="magic-login-social-button-wrapper">
+          {% set template = 'social/' + social + '/login_snippet.html' %}
+          {% include template %}
+        </div>
+      {% endfor %}
+
+      <p class="text-center">
+        <a id="nav-sign-in-by-email" href="{{ 'login_email'|route_url }}">Sign in or sign up with email</a>
+      </p>
+    </div>
+{% endblock %}
+

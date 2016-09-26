@@ -4,6 +4,7 @@ import websauna.system
 from pyramid.interfaces import IRequest
 
 
+
 class Initializer(websauna.system.DemoInitializer):
     """A demo / test app initializer for testing addon websauna.magiclogin."""
 
@@ -17,7 +18,7 @@ class Initializer(websauna.system.DemoInitializer):
         We skip registration, forgot email and such functionality as it is not needed.
         """
         from websauna.system.user import subscribers
-        from websauna.system.user.loginservice import DefaultLoginService
+        from websauna.magiclogin.requirelogin import DeferredActionLoginService
         from websauna.system.user.registrationservice import DefaultRegistrationService
         from websauna.system.user.credentialactivityservice import DefaultCredentialActivityService
 
@@ -25,7 +26,7 @@ class Initializer(websauna.system.DemoInitializer):
 
         # Set up login service
         registry = self.config.registry
-        registry.registerAdapter(factory=DefaultLoginService, required=(IRequest,), provided=ILoginService)
+        registry.registerAdapter(factory=DeferredActionLoginService, required=(IRequest,), provided=ILoginService)
         registry.registerAdapter(factory=DefaultCredentialActivityService, required=(IRequest,), provided=ICredentialActivityService)
         registry.registerAdapter(factory=DefaultRegistrationService, required=(IRequest,), provided=IRegistrationService)
 
@@ -54,6 +55,12 @@ class Initializer(websauna.system.DemoInitializer):
 
         # Your app templates go here
         self.config.add_jinja2_search_path('websauna.magiclogin:demotemplates', name='.html', prepend=True)
+
+    def configure_views(self):
+        super(Initializer, self).configure_views()
+
+        from websauna.magiclogin.tests import requireloginexamples
+        self.config.scan(requireloginexamples)
 
 
 def main(global_config, **settings):

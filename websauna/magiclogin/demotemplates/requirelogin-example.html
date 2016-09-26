@@ -1,0 +1,24 @@
+{% extends "site/base.html" %}
+
+
+{% block content %}
+
+  <h1 id="heading-require-login-example">Require login example</h1>
+
+  <p>
+    <a id="btn-get-example" class="btn btn-default" href="{{ 'example_view_get'|route_url }}?test=1">
+      GET example
+    </a>
+  </p>
+
+  <form method="POST" action="{{ 'example_view_post'|route_url }}">
+
+    <input type="hidden" name="csrf_token" value="{{ request.session.get_csrf_token() }}">
+    <input type="hidden" name="test_value" value="88">
+
+    <button id="btn-post-example" type="submit" class="btn btn-default">
+      POST example
+    </button>
+  </form>
+
+{% endblock %}

@@ -9,6 +9,8 @@ Features
 
 * Throttle protection against brute forcing and spam
 
+* Interstitial page to require user to login and then continue what ever HTTP GET/POST action user was performing
+
 Screenshots
 
 .. image:: https://github.com/websauna/websauna.magiclogin/raw/master/screenshots/login.png
@@ -75,9 +77,16 @@ Local development machine
 
 Example (OSX / Homebrew)::
 
-    psql create magiclogin_dev
+    createdb magiclogin_dev
     ws-sync-db websauna/magiclogin/conf/development.ini
     ws-pserve websauna/magiclogin/conf/development.ini --reload
+
+
+You can visit::
+
+    http://localhost:6543/login
+
+    http://localhost:6543/require_login_example_page
 
 Running the test suite
 ======================
