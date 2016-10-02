@@ -67,6 +67,23 @@
   color: black;
 }
 
+.btn-login-twitter {
+  color: white;
+  background: #55acee;
+}
+
+.btn-login-twitter {
+  color: white;
+  border: 1px solid #55acee;
+  background: #55acee;
+}
+
+.btn-login-twitter:hover {
+  border: 1px solid #55acee;
+  background: #006daa;
+}
+
+
 .google-g {
   width: 25px;
   height: 25px;
