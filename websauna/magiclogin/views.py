@@ -42,7 +42,7 @@ def login_email(request: Request):
 
     schema = AskEmailSchema().bind(request=request)
 
-    button = deform.Button(name='confirm', title="Email me a link to sign in", css_class="btn btn-default btn-block")
+    button = deform.Button(name='confirm', title="Email me a link to sign in", css_class="btn btn-primary btn-block")
 
     form = deform.Form(schema, buttons=[button])
     # User submitted this form
