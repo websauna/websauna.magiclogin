@@ -1,4 +1,5 @@
 import json
+import jinja2
 from functools import wraps
 from typing import Callable, Optional
 
@@ -20,11 +21,15 @@ def save_login_state(request: Request, msg: Optional[str]=None):
     if not msg:
         msg = request.registry.get("websauna.magiclogin.default_proceed_login_message", "Please sign in to continue")
 
+    # Allow raw HTML serialization
+    markup = isinstance(msg, jinja2.Markup)
+
     saved_state = {
         "url": request.url,
         "method": request.method,
         "params": params,
         "msg": msg,
+        "markup": markup,
     }
     request.session["proceed_to_login"] = json.dumps(saved_state).encode("utf-8")
 
@@ -38,7 +43,14 @@ def get_login_state(request: Request, remove=False):
 
         data = data.decode("utf-8")
 
-        return json.loads(data)
+        data = json.loads(data)
+
+        # Fix raw HTML markup
+        if data.get("markup"):
+            data["msg"] = jinja2.Markup(data["msg"])
+
+        return data
+
     return None
 
 
