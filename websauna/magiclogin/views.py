@@ -25,6 +25,7 @@ class AskEmailSchema(CSRFSchema):
 
 
 @simple_route("/login", route_name="login", renderer='magiclogin/login.html')
+@include_in_sitemap(False)
 def login(request: Request):
     """Replace the defaut login view with this simplified version."""
 
@@ -38,6 +39,7 @@ def login(request: Request):
               route_name="login_email",
               renderer='magiclogin/login_email.html',
               decorator=throttled_view(setting="magiclogin.login_email_throttle"))
+@include_in_sitemap(False)
 def login_email(request: Request):
     """Ask user email to start email sign in process."""
 
@@ -69,6 +71,7 @@ def login_email(request: Request):
 
 
 @simple_route("/login-email-sent", route_name="login_email_sent", renderer='magiclogin/login_email_sent.html')
+@include_in_sitemap(False)
 def login_email_sent(request: Request):
     email = request.session.get("email")
     return locals()
@@ -78,6 +81,7 @@ def login_email_sent(request: Request):
     route_name="verify_email_login",
     decorator=throttled_view(setting="magiclogin.login_email_throttle")
     )
+@include_in_sitemap(False)
 def _verify_email_login(request):
     """Confirm email login token."""
     token = request.matchdict["token"]
