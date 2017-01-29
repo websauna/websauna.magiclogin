@@ -3,6 +3,7 @@ from pyramid.settings import aslist
 import deform
 import colander
 from websauna.magiclogin.requirelogin import get_login_state
+from websauna.system.core.sitemap import include_in_sitemap
 
 from websauna.system.form.schema import CSRFSchema
 from websauna.system.form.throttle import throttled_view
@@ -85,12 +86,17 @@ def _verify_email_login(request):
 
 
 @simple_route("/login-to-continue", route_name="login_to_continue", renderer='magiclogin/login_to_continue.html')
+@include_in_sitemap(False)
 def login_to_continue(request):
     """require_login() intersitital"""
 
     state = get_login_state(request)
 
-    msg = state.get("msg")
+    if state:
+        msg = state.get("msg")
+    else:
+        # Bots banging the door
+        msg = ""
 
     settings = request.registry.settings
     social_logins = aslist(settings.get("websauna.social_logins", []))
