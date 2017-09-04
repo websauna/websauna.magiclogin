@@ -37,7 +37,7 @@ def rand_string(length=5):
 def set_verification_token(request, token_type, user_id, next_url=None):
     redis = get_redis(request.registry)
 
-    email_token_expiration_time = int(request.registry.settings.get("magiclink.email_token_expiration_seconds", 300))
+    email_token_expiration_time = int(request.registry.settings.get("magiclink.email_token_expiration_seconds", 3600))
 
     token = rand_string(length=EMAIL_TOKEN_LENGTH)
     expires = time.time() + email_token_expiration_time
