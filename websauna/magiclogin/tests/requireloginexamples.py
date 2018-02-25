@@ -1,7 +1,12 @@
+# Pyramid
 from pyramid.httpexceptions import HTTPFound
-from websauna.magiclogin.requirelogin import require_login, pop_login_state
+
+# Websauna
+from websauna.magiclogin.requirelogin import pop_login_state
+from websauna.magiclogin.requirelogin import require_login
 from websauna.system.core import messages
 from websauna.system.core.route import simple_route
+
 
 # Exposed to testing
 _get_url = 0

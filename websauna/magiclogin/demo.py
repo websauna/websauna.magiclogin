@@ -1,8 +1,10 @@
 """This contains app entry point for running a demo site for this addon or running functional tests for this addon."""
 
-import websauna.system
+# Pyramid
 from pyramid.interfaces import IRequest
 
+# Websauna
+import websauna.system
 
 
 class Initializer(websauna.system.DemoInitializer):
@@ -17,12 +19,13 @@ class Initializer(websauna.system.DemoInitializer):
 
         We skip registration, forgot email and such functionality as it is not needed.
         """
-        from websauna.system.user import subscribers
         from websauna.magiclogin.requirelogin import DeferredActionLoginService
-        from websauna.system.user.registrationservice import DefaultRegistrationService
+        from websauna.system.user import subscribers
         from websauna.system.user.credentialactivityservice import DefaultCredentialActivityService
-
-        from websauna.system.user.interfaces import ILoginService, IOAuthLoginService, IUserRegistry, ICredentialActivityService, IActivationModel, IRegistrationService
+        from websauna.system.user.interfaces import ICredentialActivityService
+        from websauna.system.user.interfaces import ILoginService
+        from websauna.system.user.interfaces import IRegistrationService
+        from websauna.system.user.registrationservice import DefaultRegistrationService
 
         # Set up login service
         registry = self.config.registry
@@ -35,7 +38,6 @@ class Initializer(websauna.system.DemoInitializer):
         self.config.add_jinja2_search_path('websauna.magiclogin:templates', name='.txt')
         self.config.add_jinja2_search_path('websauna.system.user:templates', name='.html')
         self.config.add_jinja2_search_path('websauna.system.user:templates', name='.txt')
-
 
         # Set up login event
         self.config.scan(subscribers)

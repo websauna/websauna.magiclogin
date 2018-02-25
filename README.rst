@@ -78,8 +78,8 @@ Local development machine
 Example (OSX / Homebrew)::
 
     createdb magiclogin_dev
-    ws-sync-db websauna/magiclogin/conf/development.ini
-    ws-pserve websauna/magiclogin/conf/development.ini --reload
+    ws-sync-db  ws://websauna/magiclogin/conf/development.ini
+    pserve ws://websauna/magiclogin/conf/development.ini --reload
 
 
 You can visit::

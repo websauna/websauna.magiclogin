@@ -1,5 +1,7 @@
+# Pyramid
 from pyramid.config import Configurator
 
+# Websauna
 from websauna.system import Initializer
 from websauna.system.model.utils import attach_models_to_base_from_module
 from websauna.utils.autoevent import after
@@ -14,7 +16,7 @@ class AddonInitializer:
     * For something we don't have a direct join point we just initialize through ``run()``
     """
 
-    def __init__(self, config:Configurator):
+    def __init__(self, config: Configurator):
         self.config = config
 
     @after(Initializer.configure_templates)
@@ -22,7 +24,6 @@ class AddonInitializer:
         """Include our package templates folder in Jinja 2 configuration."""
 
         # Use prepend=False here so that the app can override our templates easily
-
 
     @after(Initializer.configure_instrumented_models)
     def configure_instrumented_models(self):
@@ -63,4 +64,3 @@ def includeme(config: Configurator):
     """
     addon_init = AddonInitializer(config)
     addon_init.run()
-

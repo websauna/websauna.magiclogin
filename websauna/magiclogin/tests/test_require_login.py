@@ -1,8 +1,8 @@
-from websauna.magiclogin.tests.utils import peek_token, login
-from websauna.system.core.redis import get_redis
-
-
+# Websauna
 from websauna.magiclogin.tests import requireloginexamples
+from websauna.magiclogin.tests.utils import login
+from websauna.magiclogin.tests.utils import peek_token
+from websauna.system.core.redis import get_redis
 
 
 def test_login_actions_get_email(dbsession, browser, web_server, test_request):
