@@ -1,6 +1,6 @@
 This is a Python package for magiclogin, an addon for `Websauna framework <https://websauna.org>`_.
 
-To run this package you need Python 3.4+, PostgresSQL and Redis.
+To run this package you need Python 3.5.2+, PostgresSQL and Redis.
 
 Features
 ========
