@@ -1,6 +1,6 @@
 This is a Python package for magiclogin, an addon for `Websauna framework <https://websauna.org>`_.
 
-To run this package you need Python 3.4+, PostgresSQL and Redis.
+To run this package you need Python 3.5.2+, PostgresSQL and Redis.
 
 Features
 ========
@@ -78,8 +78,8 @@ Local development machine
 Example (OSX / Homebrew)::
 
     createdb magiclogin_dev
-    ws-sync-db websauna/magiclogin/conf/development.ini
-    ws-pserve websauna/magiclogin/conf/development.ini --reload
+    ws-sync-db  ws://websauna/magiclogin/conf/development.ini
+    pserve ws://websauna/magiclogin/conf/development.ini --reload
 
 
 You can visit::

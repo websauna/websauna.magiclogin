@@ -1,18 +1,21 @@
+# Standard Library
 import json
-import jinja2
-from functools import wraps
-from typing import Callable, Optional
+import typing as t
 
+# Pyramid
+import jinja2
 from pyramid.httpexceptions import HTTPFound
 from pyramid.response import Response
-from websauna.system.core.route import get_config_route, simple_route
+
+# Websauna
+from websauna.system.core.route import get_config_route
 from websauna.system.http import Request
 from websauna.system.user.events import Login
 from websauna.system.user.interfaces import IUser
 from websauna.system.user.loginservice import DefaultLoginService
 
 
-def save_login_state(request: Request, msg: Optional[str]=None):
+def save_login_state(request: Request, msg: t.Optional[str]=None):
     """Capture original POST/GET request before user was redirected to login page."""
 
     # TODO: This flattens NestedMultiDict to a normal dict
@@ -74,7 +77,7 @@ def require_login(msg=None):
     :param msg: Message shown in interstitial page to the user
     """
 
-    def outer(view: Callable[[object, Request], Response]):
+    def outer(view: t.Callable[[object, Request], Response]):
 
         def inner(context, request):
             if not request.user:
@@ -109,5 +112,3 @@ class DeferredActionLoginService(DefaultLoginService):
             location = get_config_route(request, 'websauna.login_redirect')
 
         return HTTPFound(location)
-
-

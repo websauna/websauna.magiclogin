@@ -1,23 +1,25 @@
 """Passwordless login with email or SMS functionality."""
 
+# Standard Library
 import json
+import logging
+import random
 import string
 import time
-import logging
-from itertools import repeat, islice
-from os import urandom
 
+# Pyramid
 from pyramid.httpexceptions import HTTPFound
-import random
-from websauna.system.core.redis import get_redis
 
+# Websauna
+from websauna.system.core import messages
+from websauna.system.core.redis import get_redis
 from websauna.system.http import Request
 from websauna.system.mail import send_templated_mail
-from websauna.system.core import messages
 from websauna.system.user.events import UserCreated
 from websauna.system.user.models import User
 from websauna.system.user.utils import get_login_service
 from websauna.utils.time import now
+
 
 #: Under which hset we store user login data
 LOGIN_VERIFICATION_REDIS_HKEY = "login_verification_token"
@@ -121,4 +123,3 @@ def start_email_login(request: Request, email: str):
     verify_minutes = int(int(request.registry.settings.get("magiclink.email_token_expiration_seconds", 300)) / 60)
     logger.info("Sending email login verification email to %s", email)
     send_templated_mail(request, [email], "magiclogin/email/verify_email", dict(verify_link=verify_link, verify_minutes=verify_minutes))
-

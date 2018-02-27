@@ -1,5 +1,7 @@
+# Standard Library
 import json
 
+# Websauna
 from websauna.system.core.redis import get_redis
 
 
@@ -8,7 +10,6 @@ def peek_token(redis):
     token_data = redis.hget("login_verification_token", keys[0])
     token_data = json.loads(token_data.decode("utf-8"))
     return token_data
-
 
 
 def login(browser, test_request, web_server: str):
@@ -31,4 +32,3 @@ def login(browser, test_request, web_server: str):
     assert b.is_element_present_by_css("#panel-magic-login-email-sent")
     b.visit("{}/verify-email-login/{}".format(web_server, peek_token(redis)["token"]))
     assert b.is_element_present_by_css("#msg-you-are-logged-in")
-
