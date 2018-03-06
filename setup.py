@@ -27,7 +27,7 @@ if len(sys.argv) >= 2:
 
 setup(
     name='websauna.magiclogin',
-    version='1.0a1',
+    version='1.0a2.dev0',
     description='Webasauna magic login addon',
     long_description=README + '\n\n' + CHANGES,
     classifiers=[
