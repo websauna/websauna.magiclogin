@@ -1,4 +1,4 @@
-1.0a1
------
+1.0a1 (2018-03-06)
+------------------
 
--  Initial version
+- Initial Release
