@@ -1,7 +1,10 @@
+Changelog for Websauna Magic Login
+==================================
+
 1.0a2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Fix missing 'namespace_packages'.
 
 
 1.0a1 (2018-03-06)

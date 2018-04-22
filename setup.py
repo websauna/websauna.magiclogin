@@ -44,6 +44,7 @@ setup(
         'Topic :: Internet :: WWW/HTTP :: WSGI :: Application',
         'Topic :: Internet :: WWW/HTTP :: WSGI',
     ],
+    namespace_packages=['websauna'],
     url='https://websauna.org',
     author='Mikko Ohtamaa',
     author_email='mikko@opensourcehacker.com',
