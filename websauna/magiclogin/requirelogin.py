@@ -15,8 +15,13 @@ from websauna.system.user.interfaces import IUser
 from websauna.system.user.loginservice import DefaultLoginService
 
 
-def save_login_state(request: Request, msg: t.Optional[str]=None):
-    """Capture original POST/GET request before user was redirected to login page."""
+def save_login_state(request: Request, msg: t.Optional[t.Union[str, jinja2.Markup]]=None, next_url=t.Optional[None]):
+    """Capture original POST/GET request before user was redirected to login page.
+
+    :param next_url: Where the user should end up after the login
+
+    :param message: Shown to the user as a message post login
+    """
 
     # TODO: This flattens NestedMultiDict to a normal dict
     params = dict(request.params.items())
@@ -33,6 +38,7 @@ def save_login_state(request: Request, msg: t.Optional[str]=None):
         "params": params,
         "msg": msg,
         "markup": markup,
+        "next_url": next_url,
     }
     request.session["proceed_to_login"] = json.dumps(saved_state).encode("utf-8")
 

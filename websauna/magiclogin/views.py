@@ -44,12 +44,20 @@ def login_email(request: Request):
     schema = AskEmailSchema().bind(request=request)
     button = deform.Button(name='confirm', title="Email me a link to sign in", css_class="btn btn-primary btn-block")
     form = deform.Form(schema, buttons=[button])
+
     # User submitted this form
     if request.method == "POST":
         if 'confirm' in request.POST:
             try:
+
+                # Where to go after user clicks the link in the email.
+                # This is signaled us through Redis, set by the view that draw Sign in with email link.
+                # Set by save_login_state()
+                state = get_login_state(request)
+                next_url = state.get("next_url")
+
                 appstruct = form.validate(request.POST.items())
-                start_email_login(request, appstruct["email"])
+                start_email_login(request, appstruct["email"], next_url=next_url)
                 return httpexceptions.HTTPFound(request.route_url("login_email_sent"))
             except deform.ValidationFailure as e:
                 # Render a form version where errors are visible next to the fields,
