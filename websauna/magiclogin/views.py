@@ -54,7 +54,10 @@ def login_email(request: Request):
                 # This is signaled us through Redis, set by the view that draw Sign in with email link.
                 # Set by save_login_state()
                 state = get_login_state(request)
-                next_url = state.get("next_url")
+                if state:
+                    next_url = state.get("next_url")
+                else:
+                    next_url = None  # Defaults to the referrer page
 
                 appstruct = form.validate(request.POST.items())
                 start_email_login(request, appstruct["email"], next_url=next_url)

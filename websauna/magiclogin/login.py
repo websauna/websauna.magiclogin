@@ -114,8 +114,11 @@ def verify_email_login(request: Request, token: str):
     user = get_or_create_email_user(request, email)
     login_service = get_login_service(request)
 
+    # next_url was saved to the Redis by the view that rendered login buttons
+    next_url = data.get("next_url")
+
     # Returns HTTPRedirect taking user to post-login page
-    return login_service.authenticate_user(user, login_source="email")
+    return login_service.authenticate_user(user, login_source="email", location=next_url)
 
 
 def start_email_login(request: Request, email: str, next_url: Optional[str]=None):
