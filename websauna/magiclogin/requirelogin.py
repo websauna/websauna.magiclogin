@@ -15,7 +15,7 @@ from websauna.system.user.interfaces import IUser
 from websauna.system.user.loginservice import DefaultLoginService
 
 
-def save_login_state(request: Request, msg: t.Optional[t.Union[str, jinja2.Markup]]=None, next_url=t.Optional[None]):
+def save_login_state(request: Request, msg: t.Optional[t.Union[str, jinja2.Markup]]=None, next_url: t.Optional[str]=None):
     """Capture original POST/GET request before user was redirected to login page.
 
     :param next_url: Where the user should end up after the login
