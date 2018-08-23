@@ -60,7 +60,7 @@ def login_email(request: Request):
                     next_url = None  # Defaults to the referrer page
 
                 appstruct = form.validate(request.POST.items())
-                start_email_login(request, appstruct["email"], next_url=next_url)
+                start_email_login(request, appstruct["email"], next_url=next_url, extras=state.get("extras"))
                 return httpexceptions.HTTPFound(request.route_url("login_email_sent"))
             except deform.ValidationFailure as e:
                 # Render a form version where errors are visible next to the fields,

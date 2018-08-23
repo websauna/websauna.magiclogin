@@ -38,7 +38,7 @@ def rand_string(length=5):
     return ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(length))
 
 
-def set_verification_token(request, token_type, user_id, next_url=None):
+def set_verification_token(request, token_type, user_id, next_url=None, extras=None):
     redis = get_redis(request.registry)
 
     email_token_expiration_time = int(request.registry.settings.get("magiclink.email_token_expiration_seconds", 3600))
@@ -52,6 +52,7 @@ def set_verification_token(request, token_type, user_id, next_url=None):
         "token": token,
         "email": user_id,
         "next_url": next_url,
+        "extras": extras,
     }
 
     redis.hset(LOGIN_VERIFICATION_REDIS_HKEY, token, json.dumps(data))
@@ -117,13 +118,16 @@ def verify_email_login(request: Request, token: str):
     # next_url was saved to the Redis by the view that rendered login buttons
     next_url = data.get("next_url")
 
+    # Restore extra passed parameters
+    request.session["login_extras"] = data.get("extras", {})
+
     # Returns HTTPRedirect taking user to post-login page
     return login_service.authenticate_user(user, login_source="email", location=next_url)
 
 
-def start_email_login(request: Request, email: str, next_url: Optional[str]=None):
+def start_email_login(request: Request, email: str, next_url: Optional[str]=None, extras: Optional[dict]=None):
     request.session["email"] = email
-    token, data = set_verification_token(request, "email", email, next_url=next_url)
+    token, data = set_verification_token(request, "email", email, next_url=next_url, extras=extras)
     verify_link = request.route_url("verify_email_login", token=token)
     verify_minutes = int(int(request.registry.settings.get("magiclink.email_token_expiration_seconds", 300)) / 60)
     logger.info("Sending email login verification email to %s, next url: %s", email, next_url)
