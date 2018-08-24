@@ -3,6 +3,7 @@ import colander
 import deform
 from pyramid import httpexceptions
 from pyramid.settings import aslist
+# from pyramid.response import Response
 
 # Websauna
 from websauna.magiclogin.requirelogin import get_login_state
@@ -11,6 +12,9 @@ from websauna.system.core.sitemap import include_in_sitemap
 from websauna.system.form.schema import CSRFSchema
 from websauna.system.form.throttle import throttled_view
 from websauna.system.http import Request
+from websauna.system.user.utils import get_login_service
+from websauna.system.user.models import User
+from websauna.system.core.views import notfound
 
 from .login import start_email_login
 from .login import verify_email_login
@@ -108,3 +112,49 @@ def login_to_continue(request):
     social_logins = aslist(settings.get("websauna.social_logins", []))
     login_slogan = request.registry.settings.get("magiclogin.login_slogan")
     return locals()
+
+
+
+@simple_route('/hacky-login', route_name="hacky_login", renderer='magiclogin/hacky_login.html', require_csrf=False)
+@include_in_sitemap(False)
+def hacky_login(request: Request):
+    """A hacky login that only asks for username - a nice thing when doing development, but ..  DANGEROUS!  USE ONLY IN DEVELOPMENT MODE!
+    """
+    verbose =True
+    # verbose=False
+
+    allow = request.registry.settings.get("magiclogin.hacky_login")
+
+    host=request.host.split(":")[0]
+
+    if (verbose): print("websauna.magiclogin.views.hacky_login : request=",request)
+    if (verbose): print("websauna.magiclogin.views.hacky_login : host=",   host)
+    if (verbose): print("websauna.magiclogin.views.hacky_login : allow=",  allow)
+
+    if ((allow==None) or (allow!="true") or (host!="localhost")):
+        # exit quietly
+        return httpexceptions.HTTPNotFound()
+
+    if (verbose): print("websauna.magiclogin.views.hacky_login : allowing passwordless login")
+
+    # Process form
+    if request.method == "POST":
+        username = request.params.get('username', None)
+        if (verbose): print("websauna.magiclogin.views.hacky_login : username",username)
+        login_service = get_login_service(request)
+        user = request.dbsession.query(User).filter_by(username=username).first()
+        try:
+            return login_service.authenticate_user(user, login_source="hacky_login")
+        except:
+            messages.add(request, msg="Invalid Auth", msg_id="msg-authentication-failure", kind="error")
+            return {}
+    else:
+        # HTTP get, display login form
+        if request.user:
+            # Already logged in
+            # return HTTPFound(location=login_redirect_view)
+            pass
+
+        # Display login form
+        return locals()
+

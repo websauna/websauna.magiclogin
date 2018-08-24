@@ -62,6 +62,9 @@ Available INI settings::
     # Text shown on the login panel
     magiclogin.login_slogan = Your login text goes here
 
+    # development option that allows you to do passwordless login at "/hacky-login".  WARNING: be sure to keep this false for production.
+    magiclogin.hacky_login = true
+
 You might also have long, secure, sessions in production::
 
     # Set session length to one year
