@@ -15,6 +15,7 @@ from websauna.system.http import Request
 from websauna.system.user.utils import get_login_service
 from websauna.system.user.models import User
 from websauna.system.core.views import notfound
+from websauna.system.core import messages
 
 from .login import start_email_login
 from .login import verify_email_login
@@ -22,6 +23,7 @@ from .login import verify_email_login
 
 class AskEmailSchema(CSRFSchema):
     """Form for getting user email."""
+
 
     email = colander.SchemaNode(
         colander.String(),
