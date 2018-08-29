@@ -36,3 +36,4 @@ perma-asset
 .tox
 .eggs
 
+.pytest_cache

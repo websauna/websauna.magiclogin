@@ -15,12 +15,14 @@ from websauna.system.user.interfaces import IUser
 from websauna.system.user.loginservice import DefaultLoginService
 
 
-def save_login_state(request: Request, msg: t.Optional[t.Union[str, jinja2.Markup]]=None, next_url: t.Optional[str]=None):
+def save_login_state(request: Request, msg: t.Optional[t.Union[str, jinja2.Markup]]=None, next_url: t.Optional[str]=None, extras: t.Optional[dict]=None):
     """Capture original POST/GET request before user was redirected to login page.
 
     :param next_url: Where the user should end up after the login
 
     :param message: Shown to the user as a message post login
+
+    :param extras: Any extra variables we want to pass over the login state. This is always restored in  request.session["login_extras"] after user has completed a login. Please note that user may switch the browsers in email login.
     """
 
     # TODO: This flattens NestedMultiDict to a normal dict
@@ -40,7 +42,15 @@ def save_login_state(request: Request, msg: t.Optional[t.Union[str, jinja2.Marku
         "markup": markup,
         "next_url": next_url,
     }
+
+    if extras:
+        saved_state["extras"] = extras
+
+    # This is consumed by get_login_state()
     request.session["proceed_to_login"] = json.dumps(saved_state).encode("utf-8")
+
+    # This is read after FB/Twitter login and not restored through a email token mechanism
+    request.session["login_extras"] = extras or {}
 
 
 def get_login_state(request: Request, remove=False):
@@ -110,6 +120,7 @@ class DeferredActionLoginService(DefaultLoginService):
 
         # Where this user was going before he or she hit login button
         login_state = get_login_state(request)
+
         if login_state:
             location = login_state["url"]
         else:
