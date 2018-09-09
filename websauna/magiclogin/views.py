@@ -1,9 +1,11 @@
+# Standard Library
+import logging
+
 # Pyramid
 import colander
 import deform
 from pyramid import httpexceptions
 from pyramid.settings import aslist
-# from pyramid.response import Response
 
 # Websauna
 from websauna.magiclogin.requirelogin import get_login_state
@@ -14,16 +16,17 @@ from websauna.system.form.throttle import throttled_view
 from websauna.system.http import Request
 from websauna.system.user.utils import get_login_service
 from websauna.system.user.models import User
-from websauna.system.core.views import notfound
 from websauna.system.core import messages
 
 from .login import start_email_login
 from .login import verify_email_login
 
 
+logger = logging.getLogger('websauna.magic')
+
+
 class AskEmailSchema(CSRFSchema):
     """Form for getting user email."""
-
 
     email = colander.SchemaNode(
         colander.String(),
@@ -118,47 +121,42 @@ def login_to_continue(request):
     return locals()
 
 
-
-@simple_route('/hacky-login', route_name="hacky_login", renderer='magiclogin/hacky_login.html', require_csrf=False)
+@simple_route('/easy-dev-login', route_name="easy_dev_login", renderer='magiclogin/easy_dev_login.html', require_csrf=False)
 @include_in_sitemap(False)
-def hacky_login(request: Request):
-    """A hacky login that only asks for username - a nice thing when doing development, but ..  DANGEROUS!  USE ONLY IN DEVELOPMENT MODE!
+def easy_dev_login(request: Request):
+    """A hacky login that only asks for username.
+
+    USE ONLY IN DEVELOPMENT MODE!
     """
-    verbose =True
-    # verbose=False
+    allow = request.registry.settings.get("magiclogin.easy_dev_login")
 
-    allow = request.registry.settings.get("magiclogin.hacky_login")
+    host = request.host.split(":")[0]
 
-    host=request.host.split(":")[0]
+    logger.debug("websauna.magiclogin.views.easy_dev_login : request={0}".format(request))
+    logger.debug("websauna.magiclogin.views.easy_dev_login : host={0}".format(host))
+    logger.debug("websauna.magiclogin.views.easy_dev_login : allow={0}".format(allow))
 
-    if (verbose): print("websauna.magiclogin.views.hacky_login : request=",request)
-    if (verbose): print("websauna.magiclogin.views.hacky_login : host=",   host)
-    if (verbose): print("websauna.magiclogin.views.hacky_login : allow=",  allow)
-
-    if ((allow==None) or (allow!="true") or (host!="localhost")):
+    if ((allow is None) or (allow != "true") or (host != "localhost")):
         # exit quietly
         return httpexceptions.HTTPNotFound()
 
-    if (verbose): print("websauna.magiclogin.views.hacky_login : allowing passwordless login")
+    logger.debug("websauna.magiclogin.views.easy_dev_login : allowing passwordless login")
 
     # Process form
     if request.method == "POST":
         username = request.params.get('username', None)
-        if (verbose): print("websauna.magiclogin.views.hacky_login : username",username)
+        logger.debug("websauna.magiclogin.views.easy_dev_login : username={0}".format(username))
         login_service = get_login_service(request)
         user = request.dbsession.query(User).filter_by(username=username).first()
         try:
-            return login_service.authenticate_user(user, login_source="hacky_login")
-        except:
-            messages.add(request, msg="Invalid Auth", msg_id="msg-authentication-failure", kind="error")
+            return login_service.authenticate_user(user, login_source="easy_dev_login")
+        except Exception as e:
+            logger.exception("Authentication failure")
+            messages.add(request, msg="Invalid Authentication", msg_id="msg-authentication-failure", kind="error")
             return {}
+    elif request.user:
+        # Already logged in
+        pass
     else:
         # HTTP get, display login form
-        if request.user:
-            # Already logged in
-            # return HTTPFound(location=login_redirect_view)
-            pass
-
-        # Display login form
         return locals()
-
