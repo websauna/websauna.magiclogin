@@ -1,3 +1,6 @@
+# Standard Library
+import logging
+
 # Pyramid
 import colander
 import deform
@@ -11,9 +14,15 @@ from websauna.system.core.sitemap import include_in_sitemap
 from websauna.system.form.schema import CSRFSchema
 from websauna.system.form.throttle import throttled_view
 from websauna.system.http import Request
+from websauna.system.user.utils import get_login_service
+from websauna.system.user.models import User
+from websauna.system.core import messages
 
 from .login import start_email_login
 from .login import verify_email_login
+
+
+logger = logging.getLogger('websauna.magic')
 
 
 class AskEmailSchema(CSRFSchema):
@@ -110,3 +119,44 @@ def login_to_continue(request):
     social_logins = aslist(settings.get("websauna.social_logins", []))
     login_slogan = request.registry.settings.get("magiclogin.login_slogan")
     return locals()
+
+
+@simple_route('/easy-dev-login', route_name="easy_dev_login", renderer='magiclogin/easy_dev_login.html', require_csrf=False)
+@include_in_sitemap(False)
+def easy_dev_login(request: Request):
+    """A hacky login that only asks for username.
+
+    USE ONLY IN DEVELOPMENT MODE!
+    """
+    allow = request.registry.settings.get("magiclogin.easy_dev_login")
+
+    host = request.host.split(":")[0]
+
+    logger.debug("websauna.magiclogin.views.easy_dev_login : request={0}".format(request))
+    logger.debug("websauna.magiclogin.views.easy_dev_login : host={0}".format(host))
+    logger.debug("websauna.magiclogin.views.easy_dev_login : allow={0}".format(allow))
+
+    if ((allow is None) or (allow != "true") or (host != "localhost")):
+        # exit quietly
+        return httpexceptions.HTTPNotFound()
+
+    logger.debug("websauna.magiclogin.views.easy_dev_login : allowing passwordless login")
+
+    # Process form
+    if request.method == "POST":
+        username = request.params.get('username', None)
+        logger.debug("websauna.magiclogin.views.easy_dev_login : username={0}".format(username))
+        login_service = get_login_service(request)
+        user = request.dbsession.query(User).filter_by(username=username).first()
+        try:
+            return login_service.authenticate_user(user, login_source="easy_dev_login")
+        except Exception as e:
+            logger.exception("Authentication failure")
+            messages.add(request, msg="Invalid Authentication", msg_id="msg-authentication-failure", kind="error")
+            return {}
+    elif request.user:
+        # Already logged in
+        pass
+    else:
+        # HTTP get, display login form
+        return locals()
